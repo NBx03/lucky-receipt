@@ -59,6 +59,13 @@ class Receipt(models.Model):
         return f"{self.fn}/{self.fd}/{self.fp}"
 
     def clean(self):
+        if self.status == self.Status.REJECTED:
+            if not self.reject_reason.strip():
+                raise ValidationError(
+                    {"reject_reason": "Укажите причину отказа."}
+                )
+        else:
+            self.reject_reason = ""
         # Ведущие нули не должны давать «другой» чек: 0042 и 42 — один документ.
         self.fd = self.fd.lstrip("0") or "0"
         self.fp = self.fp.lstrip("0") or "0"
