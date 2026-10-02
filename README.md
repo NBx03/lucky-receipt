@@ -7,8 +7,8 @@
 Нужен Docker с Compose. Больше ничего ставить не надо.
 
 ```bash
-git clone <ссылка на репозиторий>
-cd fullstack-django-test-task
+git clone https://github.com/NBx03/lucky-receipt.git
+cd lucky-receipt
 docker compose up --build
 ```
 
