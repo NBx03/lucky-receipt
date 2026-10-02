@@ -1,5 +1,8 @@
 import os
+from datetime import date
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,6 +17,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "receipts",
 ]
 
 MIDDLEWARE = [
@@ -65,7 +69,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "ru"
-TIME_ZONE = "Europe/Moscow"
+TIME_ZONE = os.environ["PROMO_TIMEZONE"]
 USE_I18N = True
 USE_TZ = True
 
@@ -74,3 +78,9 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Период акции: границы включительные, в часовом поясе PROMO_TIMEZONE.
+PROMO_START_DATE = date.fromisoformat(os.environ["PROMO_START_DATE"])
+PROMO_END_DATE = date.fromisoformat(os.environ["PROMO_END_DATE"])
+if PROMO_START_DATE > PROMO_END_DATE:
+    raise ImproperlyConfigured("PROMO_START_DATE позже PROMO_END_DATE")
