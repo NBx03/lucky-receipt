@@ -6,6 +6,16 @@
   <title>{% block title %}Чек на удачу{% endblock %}</title>
 </head>
 <body>
+  {% if user.is_authenticated %}
+    <header>
+      <a href="{% url 'cabinet' %}">Личный кабинет</a>
+      {{ user.email|default:user.username }}
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Выйти</button>
+      </form>
+    </header>
+  {% endif %}
   {% block content %}{% endblock %}
 </body>
 </html>

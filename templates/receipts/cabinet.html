@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}История чеков{% endblock %}
+{% block content %}
+  <h1>История чеков</h1>
+  <p>Чеков внесено: {{ total }} шт.</p>
+
+  {% if page.object_list %}
+    <table>
+      <thead>
+        <tr>
+          <th>Дата покупки</th>
+          <th>Статус</th>
+          <th>Сумма чека</th>
+          <th>Дата регистрации</th>
+          <th>Информация</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for receipt in page %}
+          <tr>
+            <td>{{ receipt.purchased_at|date:"H:i d.m.Y" }}</td>
+            <td class="status status--{{ receipt.status }}">{{ receipt.get_status_display }}</td>
+            <td>{{ receipt.amount|floatformat:"-2" }} ₽</td>
+            <td>{{ receipt.created_at|date:"H:i d.m.Y" }}</td>
+            <td>
+              {% if receipt.status == "pending" %}Чек в обработке{% endif %}
+              {% if receipt.status == "rejected" %}{{ receipt.reject_reason }}{% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% if page.paginator.num_pages > 1 %}
+      <nav aria-label="Страницы">
+        {% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">‹</a>{% endif %}
+        {% for number in pages %}
+          {% if number == ellipsis %}
+            <span>…</span>
+          {% elif number == page.number %}
+            <strong aria-current="page">{{ number }}</strong>
+          {% else %}
+            <a href="?page={{ number }}">{{ number }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if page.has_next %}<a href="?page={{ page.next_page_number }}">›</a>{% endif %}
+      </nav>
+    {% endif %}
+    <p>Иногда проверка вашего чека может занять до 5 рабочих дней</p>
+  {% else %}
+    <h2>Здесь будет история ваших чеков</h2>
+    <p>Вы не добавили еще ни одного чека</p>
+  {% endif %}
+
+  <p><a href="{% url 'receipt_create' %}">Зарегистрировать чек</a></p>
+{% endblock %}

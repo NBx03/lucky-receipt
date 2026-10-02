@@ -4,6 +4,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("", views.cabinet, name="cabinet"),
     path(
         "accounts/login/",
         auth_views.LoginView.as_view(redirect_authenticated_user=True),
