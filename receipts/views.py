@@ -6,12 +6,19 @@ from django.core.paginator import Paginator
 from django.db import IntegrityError, transaction
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django.views.decorators.http import require_http_methods
+from django.utils import timezone
+from django.views.decorators.http import require_GET, require_http_methods
 
 from .forms import ReceiptForm
 from .models import DUPLICATE_MESSAGE
 
 RECEIPTS_PER_PAGE = 10
+
+
+def user_receipts(user):
+    # Выборка строится от пользователя, поэтому чужих чеков в ней нет.
+    # Второй ключ сортировки делает порядок стабильным, когда даты покупки совпадают.
+    return user.receipts.order_by("-purchased_at", "-id")
 
 
 def signup(request):
@@ -53,9 +60,7 @@ def receipt_create(request):
 
 @login_required
 def cabinet(request):
-    # Второй ключ сортировки делает порядок стабильным, когда даты покупки совпадают.
-    receipts = request.user.receipts.order_by("-purchased_at", "-id")
-    paginator = Paginator(receipts, RECEIPTS_PER_PAGE)
+    paginator = Paginator(user_receipts(request.user), RECEIPTS_PER_PAGE)
     page = paginator.get_page(request.GET.get("page"))
     context = {
         "page": page,
@@ -66,3 +71,26 @@ def cabinet(request):
         "ellipsis": paginator.ELLIPSIS,
     }
     return render(request, "receipts/cabinet.html", context)
+
+
+@require_GET
+def api_receipts(request):
+    # Не login_required: тот отдал бы редирект на HTML-страницу входа, а не JSON.
+    if not request.user.is_authenticated:
+        return JsonResponse({"detail": "Требуется вход."}, status=403)
+    data = [
+        {
+            "id": receipt.id,
+            "fn": receipt.fn,
+            "fd": receipt.fd,
+            "fp": receipt.fp,
+            "purchased_at": timezone.localtime(receipt.purchased_at).isoformat(),
+            # Строкой, чтобы сумма не превращалась в float.
+            "amount": str(receipt.amount),
+            "status": receipt.status,
+            "reject_reason": receipt.reject_reason,
+            "created_at": timezone.localtime(receipt.created_at).isoformat(),
+        }
+        for receipt in user_receipts(request.user)
+    ]
+    return JsonResponse(data, safe=False)
