@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Регистрация чека{% endblock %}
+{% block content %}
+  <h1>Регистрация чека</h1>
+  <p>Акция проходит с {{ promo_start|date:"d.m.Y" }} по {{ promo_end|date:"d.m.Y" }}.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Загрузить</button>
+  </form>
+{% endblock %}
