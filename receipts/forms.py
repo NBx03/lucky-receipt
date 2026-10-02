@@ -47,6 +47,10 @@ class ReceiptForm(forms.ModelForm):
         max_digits=10,
         decimal_places=2,
         min_value=MIN_AMOUNT,
+        # type=number не пропустит запятую, поэтому обычное текстовое поле.
+        widget=forms.TextInput(
+            attrs={"placeholder": "0.00 ₽", "inputmode": "decimal", "autocomplete": "off"}
+        ),
         error_messages={
             "min_value": f"Сумма чека должна быть не меньше {MIN_AMOUNT:.0f} ₽.",
             "invalid": "Введите сумму числом, например 1500.50.",
@@ -56,6 +60,22 @@ class ReceiptForm(forms.ModelForm):
     class Meta:
         model = Receipt
         fields = ["fn", "fd", "fp", "purchased_at", "amount"]
+        labels = {"fn": "ФН", "fd": "Номер чека", "fp": "ФП"}
+        widgets = {
+            "fn": forms.TextInput(
+                attrs={"placeholder": "Введите ФН", "inputmode": "numeric", "autocomplete": "off"}
+            ),
+            "fd": forms.TextInput(
+                attrs={
+                    "placeholder": "Введите номер чека (ФД)",
+                    "inputmode": "numeric",
+                    "autocomplete": "off",
+                }
+            ),
+            "fp": forms.TextInput(
+                attrs={"placeholder": "Введите ФП", "inputmode": "numeric", "autocomplete": "off"}
+            ),
+        }
 
     def clean_purchased_at(self):
         value = self.cleaned_data["purchased_at"]

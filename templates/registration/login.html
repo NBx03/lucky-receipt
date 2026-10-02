@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Вход{% endblock %}
+{% block page_class %} page--center{% endblock %}
 {% block content %}
-  <h1>Вход</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="hidden" name="next" value="{{ next }}">
-    <button type="submit">Войти</button>
-  </form>
-  <p><a href="{% url 'signup' %}">Регистрация</a></p>
+  <section class="card card--narrow">
+    <h1>Вход</h1>
+    <form class="auth-form" method="post" style="margin-top: 16px">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button class="btn btn--block" type="submit">Войти</button>
+    </form>
+    <p class="auth-links"><a href="{% url 'signup' %}">Регистрация</a></p>
+  </section>
 {% endblock %}

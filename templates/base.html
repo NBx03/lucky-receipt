@@ -1,21 +1,42 @@
-<!doctype html>
+{% load static %}<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Чек на удачу{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
 </head>
 <body>
   {% if user.is_authenticated %}
-    <header>
-      <a href="{% url 'cabinet' %}">Личный кабинет</a>
-      {{ user.email|default:user.username }}
-      <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Выйти</button>
-      </form>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <div class="topbar__left">
+          <span class="logo" aria-hidden="true"></span>
+          <a class="back" href="{% url 'cabinet' %}">‹ На сайт</a>
+        </div>
+        <nav>
+          <a class="nav-link nav-link--active" href="{% url 'cabinet' %}">Личный кабинет</a>
+        </nav>
+        <div class="user">
+          <span class="avatar" aria-hidden="true">{{ user.get_username|first|upper }}</span>
+          <div class="user__text">
+            <strong>{{ user.get_username }}</strong>
+            {% if user.email %}<small>{{ user.email }}</small>{% endif %}
+          </div>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="link-button" type="submit">Выйти</button>
+          </form>
+        </div>
+      </div>
     </header>
   {% endif %}
-  {% block content %}{% endblock %}
+  <main class="page{% block page_class %}{% endblock %}">
+    {% block content %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

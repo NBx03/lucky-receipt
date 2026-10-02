@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_http_methods
 
-from .forms import ReceiptForm
+from .forms import MIN_AMOUNT, ReceiptForm
 from .models import DUPLICATE_MESSAGE
 
 RECEIPTS_PER_PAGE = 10
@@ -39,6 +39,8 @@ def receipt_create(request):
             "form": ReceiptForm(),
             "promo_start": settings.PROMO_START_DATE,
             "promo_end": settings.PROMO_END_DATE,
+            "min_amount": MIN_AMOUNT,
+            "now": timezone.localtime(),
         }
         return render(request, "receipts/form.html", context)
 

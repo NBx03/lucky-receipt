@@ -1,11 +1,45 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Регистрация чека{% endblock %}
+{% block page_class %} page--center{% endblock %}
 {% block content %}
-  <h1>Регистрация чека</h1>
-  <p>Акция проходит с {{ promo_start|date:"d.m.Y" }} по {{ promo_end|date:"d.m.Y" }}.</p>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Загрузить</button>
-  </form>
+  <section class="card card--narrow" id="form-card">
+    <div class="card__head">
+      <h1>Регистрация чека</h1>
+      <a class="close" href="{% url 'cabinet' %}" aria-label="Закрыть">×</a>
+    </div>
+    <p class="card__lead">Введите необходимые данные с чека</p>
+    <p class="card__hint">Акция проходит с {{ promo_start|date:"d.m.Y" }} по {{ promo_end|date:"d.m.Y" }}</p>
+
+    <form id="receipt-form" method="post" action="{% url 'receipt_create' %}" novalidate
+          data-promo-start="{{ promo_start|date:'Y-m-d' }}"
+          data-promo-end="{{ promo_end|date:'Y-m-d' }}"
+          data-min-amount="{{ min_amount|floatformat:0 }}"
+          data-now="{{ now|date:'Y-m-d\TH:i' }}">
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="field" data-field="{{ field.name }}">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          <div class="input">
+            {{ field }}
+            <button class="input__clear" type="button" aria-label="Очистить поле">×</button>
+          </div>
+          <p class="field__error" id="error-{{ field.name }}" role="alert" hidden></p>
+        </div>
+      {% endfor %}
+      <p class="form-error" id="form-error" role="alert" hidden></p>
+      <button class="btn btn--block" type="submit">Загрузить</button>
+    </form>
+  </section>
+
+  <section class="card card--narrow card--center" id="success" hidden>
+    <svg class="success__icon" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <rect x="2" y="2" width="40" height="40" rx="8"/>
+      <path d="M12 23l7 7 13-14" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1>Ваш чек загружен</h1>
+    <p class="success__text">Мы уже начали анализировать ваши покупки.<br>Это займёт всего пару секунд.</p>
+    <a class="btn" href="{% url 'cabinet' %}">На главную</a>
+  </section>
 {% endblock %}
+{% block scripts %}<script src="{% static 'js/receipt_form.js' %}" defer></script>{% endblock %}

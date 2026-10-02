@@ -1,56 +1,68 @@
 {% extends "base.html" %}
 {% block title %}История чеков{% endblock %}
 {% block content %}
-  <h1>История чеков</h1>
-  <p>Чеков внесено: {{ total }} шт.</p>
+  <section class="card">
+    <div class="card__head">
+      <h1>История чеков</h1>
+      <div class="counter">Чеков внесено: <strong>{{ total }} шт.</strong></div>
+    </div>
 
-  {% if page.object_list %}
-    <table>
-      <thead>
-        <tr>
-          <th>Дата покупки</th>
-          <th>Статус</th>
-          <th>Сумма чека</th>
-          <th>Дата регистрации</th>
-          <th>Информация</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for receipt in page %}
+    {% if page.object_list %}
+      <table class="history">
+        <thead>
           <tr>
-            <td>{{ receipt.purchased_at|date:"H:i d.m.Y" }}</td>
-            <td class="status status--{{ receipt.status }}">{{ receipt.get_status_display }}</td>
-            <td>{{ receipt.amount|floatformat:"-2" }} ₽</td>
-            <td>{{ receipt.created_at|date:"H:i d.m.Y" }}</td>
-            <td>
-              {% if receipt.status == "pending" %}Чек в обработке{% endif %}
-              {% if receipt.status == "rejected" %}{{ receipt.reject_reason }}{% endif %}
-            </td>
+            <th>Дата покупки</th>
+            <th>Статус</th>
+            <th>Сумма чека</th>
+            <th>Дата регистрации</th>
+            <th>Информация</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% for receipt in page %}
+            <tr>
+              <td data-label="Дата покупки">{{ receipt.purchased_at|date:"H:i d.m.Y" }}</td>
+              <td data-label="Статус"><span class="status status--{{ receipt.status }}">{{ receipt.get_status_display }}</span></td>
+              <td data-label="Сумма чека">{{ receipt.amount|floatformat:"-2g" }} ₽</td>
+              <td data-label="Дата регистрации">{{ receipt.created_at|date:"H:i d.m.Y" }}</td>
+              <td class="info" data-label="Информация">
+                {% if receipt.status == "pending" %}Чек в обработке{% elif receipt.status == "rejected" %}{{ receipt.reject_reason }}{% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-    {% if page.paginator.num_pages > 1 %}
-      <nav aria-label="Страницы">
-        {% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">‹</a>{% endif %}
-        {% for number in pages %}
-          {% if number == ellipsis %}
-            <span>…</span>
-          {% elif number == page.number %}
-            <strong aria-current="page">{{ number }}</strong>
-          {% else %}
-            <a href="?page={{ number }}">{{ number }}</a>
-          {% endif %}
-        {% endfor %}
-        {% if page.has_next %}<a href="?page={{ page.next_page_number }}">›</a>{% endif %}
-      </nav>
+      {% if page.paginator.num_pages > 1 %}
+        <nav class="pager" aria-label="Страницы">
+          {% if page.has_previous %}<a href="?page={{ page.previous_page_number }}" aria-label="Назад">‹</a>{% endif %}
+          {% for number in pages %}
+            {% if number == ellipsis %}
+              <span>…</span>
+            {% elif number == page.number %}
+              <strong aria-current="page">{{ number }}</strong>
+            {% else %}
+              <a href="?page={{ number }}">{{ number }}</a>
+            {% endif %}
+          {% endfor %}
+          {% if page.has_next %}<a href="?page={{ page.next_page_number }}" aria-label="Вперёд">›</a>{% endif %}
+        </nav>
+      {% endif %}
+
+      <div class="card__footer">
+        <p class="note">Иногда проверка вашего чека может занять до 5 рабочих дней</p>
+        <a class="btn" href="{% url 'receipt_create' %}">Зарегистрировать чек</a>
+      </div>
+    {% else %}
+      <div class="empty">
+        <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+          <path d="M34 22h52v76l-8-6-9 6-9-6-9 6-9-6-8 6z" stroke-linejoin="round"/>
+          <path d="M44 40h32M44 52h32M44 64h20" stroke-linecap="round"/>
+        </svg>
+        <h2>Здесь будет история ваших чеков</h2>
+        <p>Вы не добавили еще ни одного чека</p>
+        <a class="btn" href="{% url 'receipt_create' %}">Зарегистрировать чек</a>
+      </div>
     {% endif %}
-    <p>Иногда проверка вашего чека может занять до 5 рабочих дней</p>
-  {% else %}
-    <h2>Здесь будет история ваших чеков</h2>
-    <p>Вы не добавили еще ни одного чека</p>
-  {% endif %}
-
-  <p><a href="{% url 'receipt_create' %}">Зарегистрировать чек</a></p>
+  </section>
 {% endblock %}

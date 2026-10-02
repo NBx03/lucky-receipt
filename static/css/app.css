@@ -1,0 +1,609 @@
+:root {
+  --text: #182133;
+  --text-muted: #6e737d;
+  --text-faint: #8b9099;
+  --placeholder: #b9bec9;
+  --accent: #524fe5;
+  --accent-hover: #6865e8;
+  --accent-soft: #f2f1fd;
+  --page-bg: #f5f7fa;
+  --card-bg: #ffffff;
+  --border: #e2e3e6;
+  --row-border: #eaecf0;
+  --nav-active-bg: #f0f3f7;
+  --error: #f04d4d;
+  --error-bg: #fde9e9;
+  --error-border: #fbd2d2;
+  --success: #37cd1a;
+  --pending-bg: #fcf6e3;
+  --pending-text: #b8900a;
+  --accepted-bg: #def2df;
+  --accepted-text: #2a9c14;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  font-family: "Mulish", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--page-bg);
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* Шапка */
+
+.topbar {
+  background: var(--card-bg);
+}
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 16px 40px;
+}
+
+.topbar__left,
+.user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.logo {
+  width: 90px;
+  height: 24px;
+  border-radius: 4px;
+  background: #9a9a9a;
+  flex: none;
+}
+
+.topbar a {
+  text-decoration: none;
+}
+
+.back {
+  color: var(--text-muted);
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: var(--text-muted);
+}
+
+.nav-link--active {
+  background: var(--nav-active-bg);
+  color: var(--text);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  flex: none;
+}
+
+.user__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.user__text strong,
+.user__text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user__text small {
+  color: var(--text-faint);
+  font-size: 11px;
+}
+
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--accent);
+}
+
+/* Каркас страницы */
+
+.page {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 24px 40px 48px;
+}
+
+.page--center {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+.card {
+  width: 100%;
+  padding: 20px;
+  border-radius: 24px;
+  background: var(--card-bg);
+}
+
+.card--narrow {
+  max-width: 470px;
+}
+
+.card--center {
+  text-align: center;
+}
+
+.card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.card__lead {
+  margin-top: 2px;
+  color: var(--text-muted);
+}
+
+.card__hint {
+  margin: 2px 0 16px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.close {
+  color: var(--text-faint);
+  font-size: 24px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+/* Поля */
+
+.field {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.input {
+  position: relative;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="datetime-local"] {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--text);
+  font: inherit;
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--placeholder);
+}
+
+input:focus {
+  border-color: var(--accent);
+}
+
+.input__clear {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  display: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 0;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.field--error input {
+  border-color: var(--error);
+  background: #fff;
+  color: var(--error);
+}
+
+.field--error .input__clear {
+  display: block;
+}
+
+.field--error .input::after {
+  content: "*";
+  position: absolute;
+  top: -2px;
+  right: -12px;
+  color: var(--error);
+}
+
+.field--error input[type="datetime-local"] {
+  padding-right: 40px;
+}
+
+.field__error,
+.form-error {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 3px 10px 3px 8px;
+  border: 1px solid var(--error-border);
+  border-radius: 8px;
+  background: var(--error-bg);
+  color: var(--error);
+  font-size: 12px;
+}
+
+.field__error::before,
+.form-error::before {
+  content: "⚠ ";
+}
+
+.form-error {
+  display: block;
+  margin: 0 0 12px;
+}
+
+/* Кнопки */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+}
+
+.btn:disabled {
+  background: #9291ee;
+  cursor: default;
+}
+
+.btn--block {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Успех */
+
+.success__icon {
+  width: 44px;
+  height: 44px;
+  margin: 24px auto 16px;
+  color: var(--success);
+}
+
+.success__text {
+  margin: 8px 0 24px;
+  color: var(--text-muted);
+}
+
+/* Кабинет */
+
+.counter {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--page-bg);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.counter strong {
+  color: var(--accent);
+}
+
+.history {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.history th {
+  padding: 10px 12px;
+  background: var(--page-bg);
+  color: var(--text-faint);
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.history th:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.history th:last-child {
+  border-radius: 0 8px 8px 0;
+}
+
+.history td {
+  padding: 14px 12px;
+  border-bottom: 1px solid var(--row-border);
+  vertical-align: middle;
+}
+
+.history tr:last-child td {
+  border-bottom: 0;
+}
+
+.info {
+  color: var(--text-muted);
+}
+
+.status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status--pending {
+  background: var(--pending-bg);
+  color: var(--pending-text);
+}
+
+.status--accepted {
+  background: var(--accepted-bg);
+  color: var(--accepted-text);
+}
+
+.status--rejected {
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+.pager {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 8px 0 16px;
+}
+
+.pager a,
+.pager span,
+.pager strong {
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 6px;
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.pager a:hover {
+  background: var(--accent-soft);
+}
+
+.pager strong {
+  background: var(--accent);
+  color: #fff;
+}
+
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.note {
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.empty {
+  padding: 24px 0 32px;
+  text-align: center;
+}
+
+.empty svg {
+  width: 120px;
+  height: 120px;
+  color: #b8b6f2;
+}
+
+.empty h2 {
+  margin: 8px 0 4px;
+  font-size: 20px;
+}
+
+.empty p {
+  margin-bottom: 20px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+/* Вход и регистрация */
+
+.auth-form p {
+  margin-bottom: 12px;
+}
+
+.auth-form .helptext,
+.auth-form ul {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.auth-form .errorlist {
+  padding: 0;
+  list-style: none;
+  color: var(--error);
+}
+
+.auth-links {
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* Узкие экраны (макета нет, правила свои): ничего не должно выходить за ширину */
+
+@media (max-width: 800px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .topbar__inner {
+    flex-wrap: wrap;
+    padding: 12px 16px;
+  }
+
+  .topbar__left {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+
+  .topbar nav {
+    order: 3;
+  }
+
+  .user {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .page {
+    padding: 16px 16px 32px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .card__head {
+    flex-wrap: wrap;
+  }
+
+  .history,
+  .history tbody,
+  .history tr,
+  .history td {
+    display: block;
+  }
+
+  .history thead {
+    display: none;
+  }
+
+  .history tr {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--row-border);
+  }
+
+  .history tr:last-child {
+    border-bottom: 0;
+  }
+
+  .history td {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 4px 0;
+    border: 0;
+    text-align: right;
+  }
+
+  .history td::before {
+    content: attr(data-label);
+    color: var(--text-faint);
+    text-align: left;
+    flex: none;
+  }
+
+  .card__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card__footer .btn {
+    width: 100%;
+  }
+
+  .field--error .input::after {
+    right: -9px;
+  }
+}
