@@ -81,6 +81,15 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "cabinet"
 LOGOUT_REDIRECT_URL = "login"
 
+# При DEBUG=0 Django по умолчанию не пишет ошибки запросов в консоль,
+# и в логах контейнера не видно причин ответа 500.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django.request": {"handlers": ["console"], "level": "ERROR"}},
+}
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Период акции: границы включительные, в часовом поясе PROMO_TIMEZONE.
