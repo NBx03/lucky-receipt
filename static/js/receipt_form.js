@@ -114,6 +114,42 @@
     if (general.length) showFormError(general.join(" "));
   }
 
+  const qrField = document.getElementById("qr-field");
+  const qrInput = document.getElementById("qr");
+  const qrHint = document.getElementById("qr-hint");
+  const qrError = document.getElementById("qr-error");
+  const FIELD_LABELS = { fn: "ФН", fd: "ФД", fp: "ФП", purchased_at: "дата", amount: "сумма" };
+
+  function fillFromQr() {
+    qrHint.hidden = true;
+    qrError.hidden = true;
+    qrField.classList.remove("field--error");
+    const text = qrInput.value.trim();
+    if (!text) return;
+
+    const { values, missing } = window.parseReceiptQr(text);
+    const filled = Object.keys(values);
+    if (!filled.length) {
+      qrField.classList.add("field--error");
+      qrError.textContent = "Ошибка! Не удалось разобрать строку QR-кода.";
+      qrError.hidden = false;
+      return;
+    }
+    filled.forEach((name) => {
+      inputOf(name).value = values[name];
+      validateField(name);
+    });
+    qrHint.textContent = missing.length
+      ? `Заполнено: ${filled.map((name) => FIELD_LABELS[name]).join(", ")}. Не нашли: ${missing.join(", ")}.`
+      : "Поля заполнены из QR-кода. Проверьте данные и нажмите «Загрузить».";
+    qrHint.hidden = false;
+    formError.hidden = true;
+  }
+
+  qrInput.addEventListener("change", fillFromQr);
+  // Вставка из буфера: заполняем сразу, не дожидаясь ухода из поля.
+  qrInput.addEventListener("paste", () => setTimeout(fillFromQr, 0));
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     formError.hidden = true;

@@ -11,6 +11,15 @@
     <p class="card__lead">Введите необходимые данные с чека</p>
     <p class="card__hint">Акция проходит с {{ promo_start|date:"d.m.Y" }} по {{ promo_end|date:"d.m.Y" }}</p>
 
+    <div class="field field--qr" id="qr-field">
+      <label for="qr">Строка из QR-кода <span class="optional">(необязательно)</span></label>
+      <div class="input">
+        <input type="text" id="qr" placeholder="t=…&amp;s=…&amp;fn=…&amp;i=…&amp;fp=…" autocomplete="off">
+      </div>
+      <p class="field__hint" id="qr-hint" hidden></p>
+      <p class="field__error" id="qr-error" role="alert" hidden></p>
+    </div>
+
     <form id="receipt-form" method="post" action="{% url 'receipt_create' %}" novalidate
           data-promo-start="{{ promo_start|date:'Y-m-d' }}"
           data-promo-end="{{ promo_end|date:'Y-m-d' }}"
@@ -42,4 +51,7 @@
     <a class="btn" href="{% url 'cabinet' %}">На главную</a>
   </section>
 {% endblock %}
-{% block scripts %}<script src="{% static 'js/receipt_form.js' %}" defer></script>{% endblock %}
+{% block scripts %}
+  <script src="{% static 'js/qr.js' %}" defer></script>
+  <script src="{% static 'js/receipt_form.js' %}" defer></script>
+{% endblock %}

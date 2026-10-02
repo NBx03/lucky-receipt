@@ -301,6 +301,23 @@ input:focus {
   content: "⚠ ";
 }
 
+.field__hint {
+  margin-top: 6px;
+  color: var(--accepted-text);
+  font-size: 12px;
+}
+
+.optional {
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
+.field--qr {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--border);
+}
+
 .form-error {
   display: block;
   margin: 0 0 12px;
